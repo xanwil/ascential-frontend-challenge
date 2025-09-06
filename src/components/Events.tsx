@@ -31,6 +31,7 @@ export interface Venue {
 export interface EventProps {
   id: string;
   short_title: string;
+  datetime_local: Date;
   datetime_utc: Date;
   performers: Performers[];
   venue: Venue;
@@ -93,7 +94,7 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => (
           </Text>
         </Box>
         <Text fontSize="sm" fontWeight="bold" color="gray.600" justifySelf={'end'}>
-          {formatDateTime(event.datetime_utc)}
+          {formatDateTime(event.datetime_local)}
         </Text>
       </Stack>
     </CardBody>
