@@ -11,7 +11,8 @@ import {
   Stack,
   Image,
   LinkBox,
-  LinkOverlay 
+  LinkOverlay, 
+  Tooltip
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
@@ -93,9 +94,11 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => (
             {event.venue.display_location}
           </Text>
         </Box>
-        <Text fontSize="sm" fontWeight="bold" color="gray.600" justifySelf={'end'}>
-          {formatDateTime(event.datetime_local)}
-        </Text>
+        <Tooltip label={formatDateTime(event.datetime_utc)} hasArrow placement="top-start">
+          <Text fontSize="sm" fontWeight="bold" color="gray.600" justifySelf={'end'}>
+            {formatDateTime(event.datetime_local)}
+          </Text>
+        </Tooltip>
       </Stack>
     </CardBody>
   </LinkBox>
