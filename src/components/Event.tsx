@@ -81,7 +81,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ event }) => (
           <Box as="span">Date</Box>
         </StatLabel>
         <Tooltip label={formatDateTime(event.datetime_utc)} hasArrow placement="top">
-          <StatNumber fontSize="xl">{formatDateTime(event.datetime_local)}</StatNumber>
+          <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(event.datetime_local)}</StatNumber>
         </Tooltip>
       </Stat>
     </SimpleGrid>
