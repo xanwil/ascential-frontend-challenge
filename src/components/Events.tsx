@@ -59,7 +59,7 @@ const Events: React.FC = () => {
   return (
     <>
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Events' }]} />
-      <SimpleGrid spacing="6" m="6" minChildWidth="350px">
+      <SimpleGrid spacing={[4, 6]} m={[4, 6]} minChildWidth={["256px", "350px"]}>
         {data.events?.map((event: EventWithPerformers) => (
           <EventItem key={event.id.toString()} event={event} />
         ))}
