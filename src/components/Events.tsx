@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   SimpleGrid,
   Flex,
@@ -12,8 +12,13 @@ import {
   Image,
   LinkBox,
   LinkOverlay,
-  HStack
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  VStack
 } from '@chakra-ui/react';
+import { SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
 import Error from './Error';
@@ -23,6 +28,7 @@ import FavouriteButton from './FavouriteButton';
 import { FavouriteEvent } from '../types/favourites';
 
 export interface Performers {
+  name: string;
   image: string;
 }
 
@@ -40,11 +46,30 @@ interface EventItemProps {
 }
 
 const Events: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const { data, error } = useSeatGeek('/events', { 
     type: 'concert',
     sort: 'score.desc',
-    per_page: '24',
+    per_page: '100',
   });
+
+  const filteredEvents = useMemo(() => {
+    if (!data?.events || !searchQuery.trim()) {
+      return data?.events || [];
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+    return data.events.filter((event: EventWithPerformers) => {
+      const titleMatch = event.short_title?.toLowerCase().includes(query);
+      
+      const performerMatch = event.performers?.some(performer => 
+        performer.name?.toLowerCase().includes(query)
+      );
+      
+      return titleMatch || performerMatch;
+    });
+  }, [data?.events, searchQuery]);
 
   if (error) return <Error />;
 
@@ -57,14 +82,54 @@ const Events: React.FC = () => {
   }
 
   return (
-    <>
+    <VStack spacing={4} align="stretch">
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Events' }]} />
-      <SimpleGrid spacing="6" m="6" minChildWidth="350px">
-        {data.events?.map((event: EventWithPerformers) => (
+      
+      <Box mx={[4, 6]} mb={2}>
+        <InputGroup>
+          <InputLeftElement pointerEvents="none">
+            <SearchIcon color="gray.300" />
+          </InputLeftElement>
+          <Input
+            placeholder="Search events or performers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            bg="white"
+            borderColor="gray.200"
+            _hover={{ borderColor: 'gray.300' }}
+            _focus={{ borderColor: 'blue.500', boxShadow: '0 0 0 1px #3182ce' }}
+          />
+        </InputGroup>
+        {searchQuery && (
+          <Text fontSize="sm" color="gray.600" mt={2}>
+            {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''} found
+            {searchQuery && ` for "${searchQuery}"`}
+          </Text>
+        )}
+      </Box>
+
+      <SimpleGrid 
+        spacing={[4, 6]} 
+        m={[4, 6]} 
+        mt={0} 
+        columns={[1, 1, 2, 3]}
+      >
+        {filteredEvents.map((event: EventWithPerformers) => (
           <EventItem key={event.id.toString()} event={event} />
         ))}
       </SimpleGrid>
-    </>
+      
+      {filteredEvents.length === 0 && searchQuery && (
+        <Flex justifyContent="center" alignItems="center" minHeight="20vh">
+          <VStack spacing={2}>
+            <Text fontSize="lg" color="gray.500">No events found</Text>
+            <Text fontSize="sm" color="gray.400">
+              Try searching for different keywords or check your spelling
+            </Text>
+          </VStack>
+        </Flex>
+      )}
+    </VStack>
   );
 };
 
@@ -95,7 +160,7 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => (
           </Text>
         </Box>
         <Text fontSize="sm" fontWeight="bold" color="gray.600" justifySelf={'end'}>
-          {formatDateTime(new Date(event.datetime_utc))}
+          {formatDateTime(new Date(event.datetime_local))}
         </Text>
       </Stack>
     </CardBody>

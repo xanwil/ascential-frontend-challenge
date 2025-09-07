@@ -22,7 +22,6 @@ import FavouriteButton from './FavouriteButton';
 import { FavouriteEvent } from '../types/favourites';
 
 interface EventDetail extends FavouriteEvent {
-  datetime_local: Date;
   url: string;
 }
 
@@ -53,7 +52,7 @@ const Event: React.FC = () => {
           { label: event.short_title },
         ]} 
       />
-      <Flex bgColor='gray.200' p={[4, 6]} align="center" gap={2}>
+      <Flex align="center" gap={2} m="6">
         <Heading>{event.short_title}</Heading>
         <FavouriteButton item={event} type="event" />
       </Flex>
@@ -88,7 +87,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ event }) => (
           hasArrow 
           placement="top"
         >
-          <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(event.datetime_local)}</StatNumber>
+          <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(new Date(event.datetime_local))}</StatNumber>
         </Tooltip>
       </Stat>
     </SimpleGrid>

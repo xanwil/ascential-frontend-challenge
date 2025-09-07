@@ -79,7 +79,7 @@ const FavouritesDrawer: React.FC = () => {
                   onRemove={handleRemoveEvent}
                   onLinkClick={closeDrawer}
                   subtitle={`${event.venue.name_v2} • ${event.venue.display_location}`}
-                  metadata={formatDateTime(new Date(event.datetime_utc))}
+                  metadata={formatDateTime(new Date(event.datetime_local))}
                 />
               ))}
             </FavouriteSection>

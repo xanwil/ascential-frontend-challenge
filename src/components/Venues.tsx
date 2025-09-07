@@ -30,7 +30,7 @@ const Venues: React.FC = () => {
   return (
     <>
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Venues' }]} />
-      <SimpleGrid spacing="6" m="6" minChildWidth="350px">
+      <SimpleGrid spacing={[4, 6]} m={[4, 6]} minChildWidth={["256px", "350px"]}>
         {data.venues?.map((venue: FavouriteVenue) => (
           <VenueItem key={venue.id.toString()} venue={venue} />
         ))}

@@ -55,7 +55,7 @@ const Venue: React.FC = () => {
           { label: venue.name },
         ]} 
       />
-      <Flex bgColor="gray.200" p={[4, 6]} align="center" gap={2}>
+      <Flex align="center" gap={2} m="6">
         <Heading>{venue.name}</Heading>
         <FavouriteButton item={venue} type="venue" />
       </Flex>
@@ -92,7 +92,7 @@ const Stats: React.FC<StatsProps> = ({ venue }) => (
 );
 
 const Map: React.FC<MapProps> = ({ location }) => (
-  <AspectRatio ratio={16 / 5}>
+  <AspectRatio ratio={16 / 5} m="6">
     <Box
       as="iframe"
       src={`https://maps.google.com/maps?q=${location.lat},${location.lon}&z=15&output=embed`}
