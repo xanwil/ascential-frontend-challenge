@@ -108,7 +108,12 @@ const Events: React.FC = () => {
         )}
       </Box>
 
-      <SimpleGrid spacing={[4, 6]} m={[4, 6]} mt={0} minChildWidth={["256px", "350px"]}>
+      <SimpleGrid 
+        spacing={[4, 6]} 
+        m={[4, 6]} 
+        mt={0} 
+        columns={[1, 1, 2, 3]}
+      >
         {filteredEvents.map((event: EventWithPerformers) => (
           <EventItem key={event.id.toString()} event={event} />
         ))}
