@@ -15,6 +15,7 @@ import {
 import Breadcrumbs from './Breadcrumbs';
 import Error from './Error';
 import { useSeatGeek } from '../utils/useSeatGeek';
+import FavouriteButton from './FavouriteButton';
 
 interface StatsProps {
   venue: {
@@ -54,8 +55,9 @@ const Venue: React.FC = () => {
           { label: venue.name },
         ]} 
       />
-      <Flex bgColor="gray.200" p={[4, 6]}>
+      <Flex bgColor="gray.200" p={[4, 6]} align="center" gap={2}>
         <Heading>{venue.name}</Heading>
+        <FavouriteButton item={venue} type="venue" />
       </Flex>
       <Stats venue={venue} />
       <Map location={venue.location} />

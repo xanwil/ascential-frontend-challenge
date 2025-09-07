@@ -18,16 +18,16 @@ import Breadcrumbs from './Breadcrumbs';
 import Error from './Error';
 import { useSeatGeek } from '../utils/useSeatGeek';
 import { formatDateTime } from '../utils/formatDateTime';
-import { type Venue } from './Events';
+import FavouriteButton from './FavouriteButton';
+import { FavouriteEvent } from '../types/favourites';
+
+interface EventDetail extends FavouriteEvent {
+  datetime_local: Date;
+  url: string;
+}
 
 interface EventInfoProps {
-  event: {
-    short_title: string;
-    datetime_local: Date;
-    datetime_utc: Date;
-    venue: Venue;
-    url: string;
-  }
+  event: EventDetail;
 }
 
 const Event: React.FC = () => {
@@ -53,8 +53,9 @@ const Event: React.FC = () => {
           { label: event.short_title },
         ]} 
       />
-      <Flex bgColor='gray.200' p={[4, 6]}>
+      <Flex bgColor='gray.200' p={[4, 6]} align="center" gap={2}>
         <Heading>{event.short_title}</Heading>
+        <FavouriteButton item={event} type="event" />
       </Flex>
       <EventInfo event={event} />
     </>
@@ -80,7 +81,13 @@ const EventInfo: React.FC<EventInfoProps> = ({ event }) => (
         <StatLabel display="flex">
           <Box as="span">Date</Box>
         </StatLabel>
-        <Tooltip label={formatDateTime(event.datetime_utc)} hasArrow placement="top">
+        <Tooltip 
+          label={formatDateTime(
+           new Date(event.datetime_utc)
+          )} 
+          hasArrow 
+          placement="top"
+        >
           <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(event.datetime_local)}</StatNumber>
         </Tooltip>
       </Stat>

@@ -1,20 +1,14 @@
 import React from 'react';
-import { SimpleGrid, Flex, Spinner, Heading, Text, Box, Badge, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { SimpleGrid, Flex, Spinner, Heading, Text, Box, Badge, LinkBox, LinkOverlay, HStack } from '@chakra-ui/react';
 import { Link as BrowserLink } from 'react-router-dom';
 import { useSeatGeek } from '../utils/useSeatGeek';
 import Error from './Error';
 import Breadcrumbs from './Breadcrumbs';
-
-export interface VenueProps {
-  id: number;
-  has_upcoming_events: boolean;
-  num_upcoming_events: number;
-  name_v2: string;
-  display_location: string;
-}
+import FavouriteButton from './FavouriteButton';
+import { FavouriteVenue } from '../types/favourites';
 
 interface VenuItemProps {
-  venue: VenueProps;
+  venue: FavouriteVenue;
 }
 
 const Venues: React.FC = () => {
@@ -37,7 +31,7 @@ const Venues: React.FC = () => {
     <>
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Venues' }]} />
       <SimpleGrid spacing="6" m="6" minChildWidth="350px">
-        {data.venues?.map((venue: VenueProps) => (
+        {data.venues?.map((venue: FavouriteVenue) => (
           <VenueItem key={venue.id.toString()} venue={venue} />
         ))}
       </SimpleGrid>
@@ -57,12 +51,24 @@ const VenueItem: React.FC<VenuItemProps> = ({ venue }) => (
       rounded="lg"
       _hover={{ bg: 'gray.100' }}
     >
-      <Badge colorScheme={venue.has_upcoming_events ? 'green' : 'red'} mb="2">
-        {`${venue.has_upcoming_events ? venue.num_upcoming_events : 'No'} Upcoming Events`}
-      </Badge>
+      <HStack justify="space-between" align="start" mb="2">
+        <Badge colorScheme={venue.has_upcoming_events ? 'green' : 'red'}>
+          {`${venue.has_upcoming_events ? venue.num_upcoming_events : 'No'} Upcoming Events`}
+        </Badge>
+        <Box 
+          position="relative" 
+          zIndex={10}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+          style={{ pointerEvents: 'auto' }}
+        >
+          <FavouriteButton item={venue} type="venue" />
+        </Box>
+      </HStack>
       <Heading size='sm' noOfLines={1}>
         <LinkOverlay as={BrowserLink} to={`/venues/${venue.id}`}>
-          {venue.name_v2}
+          {venue.name}
         </LinkOverlay>
       </Heading>
       <Text fontSize="sm" color="gray.500">{venue.display_location}</Text>

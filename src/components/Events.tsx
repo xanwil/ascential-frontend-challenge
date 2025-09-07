@@ -11,13 +11,16 @@ import {
   Stack,
   Image,
   LinkBox,
-  LinkOverlay 
+  LinkOverlay,
+  HStack
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
 import Error from './Error';
 import { useSeatGeek } from '../utils/useSeatGeek';
 import { formatDateTime } from '../utils/formatDateTime';
+import FavouriteButton from './FavouriteButton';
+import { FavouriteEvent } from '../types/favourites';
 
 export interface Performers {
   image: string;
@@ -28,16 +31,12 @@ export interface Venue {
   display_location: string;
 }
 
-export interface EventProps {
-  id: string;
-  short_title: string;
-  datetime_utc: Date;
+interface EventWithPerformers extends FavouriteEvent {
   performers: Performers[];
-  venue: Venue;
 }
 
 interface EventItemProps {
-  event: EventProps;
+  event: EventWithPerformers;
 }
 
 const Events: React.FC = () => {
@@ -61,7 +60,7 @@ const Events: React.FC = () => {
     <>
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Events' }]} />
       <SimpleGrid spacing="6" m="6" minChildWidth="350px">
-        {data.events?.map((event: EventProps) => (
+        {data.events?.map((event: EventWithPerformers) => (
           <EventItem key={event.id.toString()} event={event} />
         ))}
       </SimpleGrid>
@@ -81,9 +80,12 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => (
     <Image src={event.performers[0].image} />
     <CardBody>
       <Stack spacing="2">
-        <Heading size="md">
-          <LinkOverlay as={Link} to={`/events/${event.id}`}>{event.short_title}</LinkOverlay>
-        </Heading>
+        <HStack justify="space-between" align="start">
+          <Heading size="md" flex={1}>
+            <LinkOverlay as={Link} to={`/events/${event.id}`}>{event.short_title}</LinkOverlay>
+          </Heading>
+          <FavouriteButton item={event} type="event" />
+        </HStack>
         <Box>
           <Text fontSize="sm" color="gray.600">
             {event.venue.name_v2}
@@ -93,7 +95,7 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => (
           </Text>
         </Box>
         <Text fontSize="sm" fontWeight="bold" color="gray.600" justifySelf={'end'}>
-          {formatDateTime(event.datetime_utc)}
+          {formatDateTime(new Date(event.datetime_utc))}
         </Text>
       </Stack>
     </CardBody>
