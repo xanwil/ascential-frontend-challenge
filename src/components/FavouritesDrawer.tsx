@@ -96,7 +96,7 @@ const FavouritesDrawer: React.FC = () => {
                 <FavouriteItem
                   key={venue.id}
                   id={venue.id}
-                  title={venue.name_v2}
+                  title={venue.name}
                   linkTo={`/venues/${venue.id}`}
                   onRemove={handleRemoveVenue}
                   onLinkClick={closeDrawer}
