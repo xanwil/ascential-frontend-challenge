@@ -22,7 +22,6 @@ import FavouriteButton from './FavouriteButton';
 import { FavouriteEvent } from '../types/favourites';
 
 interface EventDetail extends FavouriteEvent {
-  datetime_local: Date;
   url: string;
 }
 
@@ -88,7 +87,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ event }) => (
           hasArrow 
           placement="top"
         >
-          <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(event.datetime_local)}</StatNumber>
+          <StatNumber fontSize="xl" maxW="fit-content">{formatDateTime(new Date(event.datetime_local))}</StatNumber>
         </Tooltip>
       </Stat>
     </SimpleGrid>

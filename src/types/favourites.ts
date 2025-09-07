@@ -2,6 +2,7 @@ export interface FavouriteEvent {
   id: string;
   short_title: string;
   datetime_utc: string;
+  datetime_local: string;
   venue: {
     name_v2: string;
     display_location: string;
