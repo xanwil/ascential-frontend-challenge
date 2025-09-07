@@ -51,7 +51,7 @@ const Events: React.FC = () => {
   const { data, error } = useSeatGeek('/events', { 
     type: 'concert',
     sort: 'score.desc',
-    per_page: '24',
+    per_page: '100',
   });
 
   const filteredEvents = useMemo(() => {
