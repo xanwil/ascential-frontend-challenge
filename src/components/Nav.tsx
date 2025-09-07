@@ -14,6 +14,9 @@ const Nav: React.FC = () => {
       color="white"
       padding="24px"
       align="center"
+      position="sticky"
+      top="0"
+      zIndex="11"
     >
       <Heading size="md">Ascential Front End Challenge</Heading>
       <Spacer />
